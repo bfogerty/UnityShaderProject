@@ -14,6 +14,10 @@ public class AsciiArtPostProcessingFx : MonoBehaviour
 
     void OnRenderImage(RenderTexture src, RenderTexture dest)
     {
+
+        float aspectRatio = (float)(Screen.width) / Screen.height;
+        matFx.SetFloat("_AspectRatio", aspectRatio);
+
         Graphics.Blit(src, dest, matFx);
     }
 }

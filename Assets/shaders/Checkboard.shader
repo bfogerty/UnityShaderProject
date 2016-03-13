@@ -2,12 +2,12 @@
 {
 	Properties
 	{
-		
+		_AspectRatio("Aspect Ratio", FLOAT) = 1
 	}
 
-	SubShader
+		SubShader
 	{
-		Tags { "RenderType"="Opaque" }
+		Tags { "RenderType" = "Opaque" }
 		LOD 100
 
 		Pass
@@ -15,8 +15,10 @@
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
-			
+
 			#include "UnityCG.cginc"
+
+			float _AspectRatio;
 
 			struct appdata
 			{
@@ -41,9 +43,13 @@
 			
 			float4 frag (v2f i) : SV_Target
 			{
-				float2 p = i.uv * 2.0 - 1.0;
+				float2 uv = i.uv;
+				uv.x *= _AspectRatio;
 
-				float3 finalColor = float3(p.x, p.x, p.x);
+				float scale = 10.0;
+				float d = floor(fmod(floor(uv.x * scale) + floor(uv.y * scale), 2.0));
+
+				float3 finalColor = float3(d, d, d);
 				
 				return float4( finalColor, 1.0 );
 			}
