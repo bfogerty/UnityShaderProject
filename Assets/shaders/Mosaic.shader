@@ -3,6 +3,7 @@
 	Properties
 	{
 		_AspectRatio("Aspect Ratio", FLOAT) = 1
+		_Resolution("Resolution", FLOAT) = 40
 		_SrcTex("Source Texture", 2D) = "white" {}
 	}
 
@@ -20,6 +21,7 @@
 #include "UnityCG.cginc"
 
 	float _AspectRatio;
+	float _Resolution;
 	sampler2D _SrcTex;
 
 	struct appdata
@@ -47,8 +49,7 @@
 	{
 		float2 uv = i.uv;
 
-		float resolution = 40.0;
-		uv = floor(uv * resolution) * (1.0 / resolution);
+		uv = floor(uv * _Resolution) * (1.0 / _Resolution);
 
 		float3 finalColor = tex2D(_SrcTex, uv).rgb;
 

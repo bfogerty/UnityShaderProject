@@ -38,6 +38,10 @@
 			v2f vert (appdata v)
 			{
 				v2f o;
+
+				v.vertex.w = 1.0;
+				v.normal.w = 0.0;
+
 				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
 				o.worldPosition = mul( _Object2World, v.vertex );
 				o.worldNormal = normalize( mul(_Object2World, v.normal) );
@@ -51,14 +55,15 @@
 			float3 calculateLighting(float3 diffuseTintColor, float3 pointOnSurface, float3 surfaceNormal, float3 lightPosition, float3 cameraPosition)
 			{
 			    float3 fromPointToLight = normalize(lightPosition - pointOnSurface);
-			    float diffuseStrength = clamp( dot( surfaceNormal, fromPointToLight ), 0.0, 1.0 );
-			    
+			    float diffuseStrength = clamp( dot( surfaceNormal, fromPointToLight ), 0.3, 1.0 );
+
 			    diffuseStrength = tex2D(_RampTex, float2(diffuseStrength, 0.5));
 			    float3 diffuseColor = diffuseStrength * diffuseTintColor;
 			    float3 reflectedLightVector = normalize( reflect( -fromPointToLight, surfaceNormal ) );
 			    
 			    float3 fromPointToCamera = normalize( cameraPosition - pointOnSurface );
 			    float specularStrength = pow( clamp( dot(reflectedLightVector, fromPointToCamera), 0.0, 1.0 ), 10.0 );
+
 			    specularStrength = tex2D(_RampTex, float2(specularStrength, 0.5));
 			    // Ensure that there is no specular lighting when there is no diffuse lighting.
 			    specularStrength = min( diffuseStrength, specularStrength );
@@ -67,7 +72,7 @@
 			    float3 finalColor = diffuseColor + specularColor; 
 			 
 			    // Draw a thick silhouette around our object
-			    if( dot( fromPointToCamera, surfaceNormal ) < 0.2 )
+			    if( dot( fromPointToCamera, surfaceNormal ) < 0.6 )
 			    {
 			        finalColor = float3( 0.0, 0.0, 0.0 );
 			    }

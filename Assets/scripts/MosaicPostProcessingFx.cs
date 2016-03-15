@@ -3,6 +3,9 @@ using System.Collections;
 
 public class MosaicPostProcessingFx : MonoBehaviour
 {
+    [Range(1, 200)]
+    public float Resolution = 40;
+
     Material matFx = null;
 
     // Use this for initialization
@@ -17,6 +20,7 @@ public class MosaicPostProcessingFx : MonoBehaviour
 
         float aspectRatio = (float)(Screen.width) / Screen.height;
         matFx.SetFloat("_AspectRatio", aspectRatio);
+        matFx.SetFloat("_Resolution", Resolution);
         matFx.SetTexture("_SrcTex", src);
 
         Graphics.Blit(src, dest, matFx);
